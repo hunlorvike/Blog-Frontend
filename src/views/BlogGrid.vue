@@ -25,7 +25,7 @@ export default {
             this.axios
                 .get(`/api/post/getPostsByCategory?category=${category}`)
                 .then((response) => {
-                    this.posts = response.data.data;
+                    this.posts = response.data;
                     console.log(this.posts);
                     this.posts.forEach(post => {
                         // Truy cập mảng images trong mỗi bài viết và lặp qua từng hình ảnh
@@ -47,7 +47,7 @@ export default {
             this.axios
                 .get("/api/category/getAllCategorys")
                 .then((response) => {
-                    this.categories = response.data.data.map(item => item.category_name);
+                    this.categories = response.data.map(item => item.category_name);
                 })
                 .catch((error) => {
                     console.error("Error fetching data:", error);
@@ -173,7 +173,7 @@ export default {
                                                     <router-link style="color: inherit;"
                                                                  :to="{ name: 'Author', query: { author: post.creator_id } }"
                                                     >
-                                                        {{ post.author }}
+                                                        {{ post.creator_name }}
                                                     </router-link>
                                                 </li>
                                                 <li class="post-date">

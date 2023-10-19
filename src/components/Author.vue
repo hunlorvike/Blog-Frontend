@@ -4,14 +4,17 @@ export default {
     data() {
         return {
             posts: [],
-            user: null, // Thêm một thuộc tính user để lưu thông tin người dùng
+            user: null,
+            userId: null,
         };
     },
     created() {
+        this.userId = this.$route.query.author;
+        console.log("user id: " + this.userId);
         // Lấy dữ liệu ban đầu khi trang tải lần đầu
-        this.fetchDataFromAPI(this.$route.query.author);
+        this.fetchDataFromAPI(this.userId);
         // Lấy thông tin người dùng
-        this.fetchUserData(this.$route.query.author);
+        this.fetchUserData(this.userId);
     },
     watch: {
         $route(to, from) {
@@ -28,7 +31,8 @@ export default {
             this.axios
                 .get(`/api/post/getPostsByAuthor?author=${author}`)
                 .then((response) => {
-                    this.posts = response.data.data;
+                    this.posts = response.data;
+                    console.log(response.data);
                     this.posts.forEach(post => {
                         if (post.images) {
                             post.images.forEach(image => {
@@ -48,7 +52,7 @@ export default {
             this.axios
                 .get(`/api/user/getUsersById?id=${userId}`)
                 .then((response) => {
-                    this.user = response.data.data; // Lưu thông tin người dùng
+                    this.user = response.data; // Lưu thông tin người dùng
                     console.log(this.user);
                 })
                 .catch((error) => {
@@ -127,8 +131,8 @@ export default {
 
                             </div>
                             <div class="author-content">
-                                <h6 class="name" v-if="posts[0] && posts[0].author">Hi I'm {{ posts[0].author }}</h6>
-                                <div class="btn-link" style="text-decoration: none" v-if="posts[0]"> {{ posts.length }}
+                                <h6 class="name">Hi I'm {{ user.fullname }}</h6>
+                                <div class="btn-link" style="text-decoration: none"> {{ posts.length }}
                                     Bài viết
                                 </div>
                                 <p class="bio">
@@ -237,7 +241,7 @@ export default {
                                         <router-link style="color: inherit;"
                                                      :to="{ name: 'Author', query: { author: post.creator_id } }"
                                         >
-                                            {{ post.author }}
+                                            {{ post.creator_name }}
                                         </router-link>
                                     </li>
                                     <li class="post-date"><span class="dot"></span> {{

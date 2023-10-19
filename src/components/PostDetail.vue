@@ -39,8 +39,7 @@ export default {
             this.axios
                 .get("/api/category/getAllCategorys")
                 .then((response) => {
-                    this.categories = response.data.data.map(item => item.category_name);
-                    console.log(this.categories);
+                    this.categories = response.data.map(item => item.category_name);
                 })
                 .catch((error) => {
                     console.error("Error fetching data:", error);
@@ -50,9 +49,7 @@ export default {
             this.axios
                 .get(`/api/user/getUsersById?id=${creatorId}`)
                 .then((response) => {
-                    this.author = response.data.data;
-                    console.log(this.author);
-
+                    this.author = response.data;
                     // Kiểm tra xem có đường dẫn hình ảnh không
                     if (this.author.avatar_path) {
                         const segments = this.author.avatar_path.split('\\');
@@ -68,7 +65,8 @@ export default {
             this.axios
                 .get(`/api/post/getPostById?id=${postId}`)
                 .then((response) => {
-                    this.post = response.data.data;
+                    this.post = response.data;
+                    console.log("post " + response.data);
                     // Truy cập mảng images trong mỗi bài viết và lặp qua từng hình ảnh
                     if (this.post.images) {
                         this.post.images.forEach(image => {
@@ -179,7 +177,7 @@ export default {
                                             <router-link style="color: inherit;"
                                                          :to="{ name: 'Author', query: { author: post.creator_id } }"
                                             >
-                                                {{ post.author }}
+                                                {{ post.creator_name }}
                                             </router-link>
                                         </li>
                                         <li class="post-date"><span class="dot"></span>

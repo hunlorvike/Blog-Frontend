@@ -54,7 +54,7 @@
                                         <router-link style="color: inherit;"
                                                      :to="{ name: 'Author', query: { author: post.creator_id } }"
                                         >
-                                            {{ post.author }}
+                                            {{ post.creator_name }}
                                         </router-link>
                                     </li>
                                     <li class="post-date"><span class="dot"></span> {{
@@ -135,8 +135,8 @@ export default {
             this.axios
                 .get("/api/post/getAllPosts")
                 .then((response) => {
-                    this.posts = response.data.data;
-
+                    this.posts = response.data;
+                    console.log(this.posts)
                     this.posts.forEach(post => {
                         // Truy cập mảng images trong mỗi bài viết và lặp qua từng hình ảnh
                         if (post.images) {
